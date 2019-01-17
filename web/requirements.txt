@@ -4,9 +4,11 @@ djangorestframework>=2.4
 django-grappelli>=2.8.1
 django-formtools
 requests>=2.5.1
-social-auth-app-django
+social-auth-app-django==2.1.0
+social-auth-core==1.7.0
+PyJWT==1.6.4
 python3-openid
 python-oauth2
-oauthlib>=0.6.2
+oauthlib>=0.6.2,<3.0.0
 pyjwkest>=1.4.0
 lti
