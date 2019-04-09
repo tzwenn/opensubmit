@@ -1,4 +1,4 @@
-e% load projecttags %}
+{% load projecttags %}
 
 {% setting "LOGIN_GOOGLE" as login_google %}
 {% setting "LOGIN_TWITTER" as login_twitter %}

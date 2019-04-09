@@ -321,6 +321,11 @@ LOGIN_GITLAB = (config.get("login", "LOGIN_GITLAB_OAUTH_KEY").strip() != '' and
 
 HIDDEN_LOGINS = config.get_list("login", "HIDDEN_LOGINS", mapfunc=lambda s: ("LOGIN_" + s.upper()))
 
+MERGE_OIDC = config.get_bool('login', 'MERGE_OIDC', default=False)
+
+if MERGE_OIDC:
+    OPENID_PROVIDER = config.get('login', 'OPENID_PROVIDER')
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
