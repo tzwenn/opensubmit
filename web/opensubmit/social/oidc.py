@@ -6,7 +6,7 @@ from django.conf import settings
 from social_core.backends.open_id_connect import OpenIdConnectAuth as OpenIdConnectAuthBase
 
 class OpenIdConnectAuth(OpenIdConnectAuthBase):
-	OIDC_ENDPOINT = settings.LOGIN_OIDC_ENDPOINT if settings.LOGIN_OIDC else None
+	OIDC_ENDPOINT = getattr(settings, "LOGIN_OIDC_ENDPOINT", None)
 
 	# social_core.backends_settings.open_id_connect lacks
 	# the bakcend-cache lookup name :(

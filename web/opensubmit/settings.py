@@ -39,6 +39,12 @@ class Config():
         text = self.get(name, category)
         return text.lower() in ['true', 't', 'yes', 'active', 'enabled']
 
+    def get_list(self, name, category, delim=",", strip=True, mapfunc=lambda x: x):
+        if not self.has_option(name, category):
+            return []
+        text = self.get(name, category)
+        return [mapfunc(s.strip() if strip else s) for s in text.split(delim)]
+
     def get(self, name, category, mandatory=False, expect_leading_slash=None, expect_trailing_slash=None):
         try:
             text = self.config.get(name, category)
@@ -312,6 +318,8 @@ LOGIN_GITLAB = (config.get("login", "LOGIN_GITLAB_OAUTH_KEY").strip() != '' and
                 config.get("login", "LOGIN_GITLAB_OAUTH_SECRET").strip() != '' and
                 config.get("login", "LOGIN_GITLAB_URL").strip() != '')
 
+HIDDEN_LOGINS = config.get_list("login", "HIDDEN_LOGINS", mapfunc=lambda s: ("LOGIN_" + s.upper()))
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -374,6 +382,9 @@ if LOGIN_SHIB:
     whitelist = config.get("whitelist", "WHITELIST_SHIB").strip()
     if whitelist != "":
         SOCIAL_AUTH_SHIB_WHITELISTED_EMAILS = config.get("whitelist", "WHITELIST_SHIB").split(',')
+
+for login in HIDDEN_LOGINS:
+    globals()[login] = False
 
 AUTHENTICATION_BACKENDS += ('opensubmit.social.lti.LtiAuth',)
 
