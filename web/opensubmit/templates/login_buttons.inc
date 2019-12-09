@@ -9,6 +9,8 @@
 {% setting "LOGIN_DESCRIPTION" as login_description %}
 {% setting "LOGIN_OIDC" as login_oidc %}
 {% setting "LOGIN_OIDC_DESCRIPTION" as login_oidc_description %}
+{% setting "LOGIN_SAML" as login_saml %}
+{% setting "LOGIN_SAML_DESCRIPTION" as login_saml_description %}
 {% setting "LOGIN_SHIB" as login_shib %}
 {% setting "LOGIN_SHIB_DESCRIPTION" as login_shib_description %}
 {% setting "DEMO" as demo %}
@@ -46,6 +48,11 @@
             {% if login_gitlab %}
             <div class="col-md-3">
                 <a href="{% url 'social:begin' 'gitlab' %}?next={{ next }}" class="btn-auth btn-github"><b>{{ login_gitlab_description }}</b></a>
+            </div>
+            {% endif %}
+            {% if login_saml %}
+            <div class="col-md-3">
+                <a href="{% url 'social:begin' 'saml' %}?next={{ next }}&idp=defaultidp" class="btn-auth btn-openid"><b>{{ login_saml_description }}</b></a>
             </div>
             {% endif %}
             {% if login_shib %}

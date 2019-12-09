@@ -313,6 +313,7 @@ LOGIN_TWITTER = (config.get("login", "LOGIN_TWITTER_OAUTH_KEY").strip() != '' an
                  config.get("login", "LOGIN_TWITTER_OAUTH_SECRET").strip() != '')
 LOGIN_OPENID = (config.get('login', 'OPENID_PROVIDER').strip() != '')
 LOGIN_OIDC = (config.get('login', 'LOGIN_OIDC_ENDPOINT').strip() != '')
+LOGIN_SAML = (config.get('login', 'LOGIN_SAML_DESCRIPTION').strip() != '')
 LOGIN_SHIB = (config.get('login', 'LOGIN_SHIB_DESCRIPTION').strip() != '')
 LOGIN_GITLAB = (config.get("login", "LOGIN_GITLAB_OAUTH_KEY").strip() != '' and
                 config.get("login", "LOGIN_GITLAB_OAUTH_SECRET").strip() != '' and
@@ -375,6 +376,32 @@ if LOGIN_OIDC:
     whitelist = config.get("whitelist", "WHITELIST_OIDC").strip()
     if whitelist != "":
         SOCIAL_AUTH_OIDC_WHITELISTED_EMAILS = config.get("whitelist", "WHITELIST_OIDC").split(',')
+
+if LOGIN_SAML:
+    AUTHENTICATION_BACKENDS += ('opensubmit.social.saml.SAMLAuth',)
+    LOGIN_SAML_DESCRIPTION = config.get('login', 'LOGIN_SAML_DESCRIPTION')
+    SOCIAL_AUTH_SAML_SP_ENTITY_ID = mainurl + "/saml/Metadata"
+    SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = open(config.get('login', 'LOGIN_SAML_CERTFILE')).read()
+    SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = open(config.get('login', 'LOGIN_SAML_KEYFILE')).read()
+    SOCIAL_AUTH_SAML_ORG_INFO = {
+        "en": {
+            "name": config.get('login', 'LOGIN_SAML_SERVICE_NAME'),
+            "displayname": config.get('login', 'LOGIN_SAML_SERVICE_DISPLAYNAME'),
+            "url": mainurl,
+        }
+    }
+    SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
+        "givenName": config.get('login', 'LOGIN_SAML_CONTACT_NAME'),
+        "emailAddress": config.get('login', 'LOGIN_SAML_CONTACT_MAIL')
+    }
+    SOCIAL_AUTH_SAML_SUPPORT_CONTACT = SOCIAL_AUTH_SAML_TECHNICAL_CONTACT
+    SOCIAL_AUTH_SAML_ENABLED_IDPS = {
+        "defaultidp": {
+            "entity_id": config.get('login', 'LOGIN_SAML_IDP_ENTITY_ID'),
+            "url": config.get('login', 'LOGIN_SAML_IDP_URL'),
+            "x509cert": config.get('login', 'LOGIN_SAML_IDP_X509')
+        }
+    }
 
 if LOGIN_SHIB:
     AUTHENTICATION_BACKENDS += ('opensubmit.social.apache.ModShibAuth',)

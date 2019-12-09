@@ -6,11 +6,14 @@ from opensubmit import admin
 from opensubmit.views import frontend, backend, lti, api, demo
 from opensubmit.forms import MailForm
 
+from opensubmit.social import saml
+
 urlpatterns = [
     # Frontend Login
     url(r'^demo/(?P<role>.*)/$', demo.LoginView.as_view(), name='demo'),
     url(r'^$', frontend.IndexView.as_view(), name='index'),
     url('', include('social_django.urls', namespace='social')),
+    url(r'^saml/Metadata/$', saml.saml_metadata_view, name='saml_meta'),
     # Frontend views
     url(r'^logout/$', frontend.LogoutView.as_view(), name='logout'),
     url(r'^settings/$', frontend.SettingsView.as_view(), name='settings'),
