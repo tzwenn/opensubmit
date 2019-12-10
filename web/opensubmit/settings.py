@@ -371,6 +371,7 @@ if LOGIN_OPENID:
     whitelist = config.get("whitelist", "WHITELIST_OPENID").strip()
     if whitelist != "":
         SOCIAL_AUTH_OPENID_WHITELISTED_EMAILS = config.get("whitelist", "WHITELIST_OPENID").split(',')
+    OPENID_USE_STATELESS_MODE = config.get_bool('login', 'OPENID_USE_STATELESS_MODE', default=False)
 
 if LOGIN_OIDC:
     AUTHENTICATION_BACKENDS += ('opensubmit.social.oidc.OpenIdConnectAuth',)

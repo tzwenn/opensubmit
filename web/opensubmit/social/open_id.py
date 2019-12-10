@@ -8,3 +8,6 @@ from social_core.backends.open_id import OpenIdAuth as OpenIdAuthBase
 
 class OpenIdAuth(OpenIdAuthBase):
 	URL = settings.OPENID_PROVIDER
+
+	def create_consumer(self, store=None):
+		return super(OpenIdAuth, self).create_consumer(None if settings.OPENID_USE_STATELESS_MODE else store)
