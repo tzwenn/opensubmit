@@ -147,7 +147,7 @@ class MailFormPreview(StaffRequiredMixin, FormPreview):
     def get_context(self, request, form):
         context = super().get_context(request, form)
         mailadrs_qs = self.state['receivers'].order_by('email').distinct().values('first_name', 'last_name', 'email')
-        mailadrs = [mailadr for mailadr in mailadrs_qs]
+        mailadrs = [mailadr for mailadr in mailadrs_qs] if request.user.is_staff else []
         context['receivers'] = mailadrs
         context['sender'] = request.user
         return context
