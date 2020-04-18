@@ -167,13 +167,14 @@ def check_file(filepath):
         TODO: This is Debian / Ubuntu specific.
     '''
     check_path(filepath)
+    from django.conf import settings
     if not os.path.exists(filepath):
         print("WARNING: File does not exist. Creating it: %s" % filepath)
         open(filepath, 'a').close()
     try:
-        print("Setting access rights for %s for www-data user" % (filepath))
-        uid = pwd.getpwnam("www-data").pw_uid
-        gid = grp.getgrnam("www-data").gr_gid
+        print("Setting access rights for %s for to %s:%s" % (filepath, settings.SERVER_USER, settings.SERVER_GROUP))
+        uid = pwd.getpwnam(settings.SERVER_USER).pw_uid
+        gid = grp.getgrnam(settings.SERVER_GROUP).gr_gid
         os.chown(filepath, uid, gid)
         os.chmod(filepath, 0o660)  # rw-rw---
     except Exception:

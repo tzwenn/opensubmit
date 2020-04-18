@@ -45,10 +45,12 @@ class Config():
         text = self.get(name, category)
         return [mapfunc(s.strip() if strip else s) for s in text.split(delim)]
 
-    def get(self, name, category, mandatory=False, expect_leading_slash=None, expect_trailing_slash=None):
+    def get(self, name, category, mandatory=False, expect_leading_slash=None, expect_trailing_slash=None, default=None):
         try:
             text = self.config.get(name, category)
         except configparser.NoOptionError:
+            if default is not None:
+                return default
             if not mandatory:
                 return ''
             else:
@@ -115,6 +117,11 @@ DEMO = config.get_bool('general', 'DEMO', default=False)
 
 HOST = config.get('server', 'HOST')
 HOST_DIR = config.get('server', 'HOST_DIR')
+
+SERVER_USER = config.get('server', 'USER', default="www-data")
+SERVER_GROUP = config.get('server', 'GROUP', default="www-data")
+
+print(SERVER_USER, SERVER_GROUP)
 
 if len(HOST_DIR) > 0:
     mainurl = HOST + '/' + HOST_DIR
