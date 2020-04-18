@@ -115,10 +115,17 @@ DEMO = config.get_bool('general', 'DEMO', default=False)
 
 HOST = config.get('server', 'HOST')
 HOST_DIR = config.get('server', 'HOST_DIR')
+
 if len(HOST_DIR) > 0:
     mainurl = HOST + '/' + HOST_DIR
+    if config.get_bool('server', 'ENABLE_FORCE_SCRIPT_NAME', default=False):
+        FORCE_SCRIPT_NAME = '/' + HOST_DIR
 else:
     mainurl = HOST
+
+if config.get_bool('server', 'BEHIND_HTTPS_PROXY', default=False):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 LOGIN_URL = 'index'
 LOGIN_ERROR_URL = 'index'
